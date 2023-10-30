@@ -12,9 +12,11 @@ typedef struct {
 // Define any additional variables here
 char line[1024];
 FITNESS_DATA data;
-char stepsStr[10];
-char result[1024][30];//Set up an array to hold the data.
+char result_date[1024][30];//Set up an array to hold the data.
+char result_time[1024][30];
+int result_steps[1024];
 int x=0;
+char Char_steps[100];
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
@@ -45,28 +47,27 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
-    FILE *file = fopen("./FitnessData_2023.csv", "r"); // Open the csv file to read.
+        FILE *file = fopen("./FitnessData_2023.csv", "r"); // Open the csv file to read.
 
-    if (file == NULL) {
-        printf("Can't open the file.\n");
-        return 1;
-    }//To face the situation that can't find the file.
+        if (fgets(line, sizeof(line), file)) {
+            do {
+                snprintf(Char_steps, sizeof(Char_steps), "%d", data.steps); // Exchange the steps from int to char.
 
-    if (fgets(line, sizeof(line), file)) {
-        snprintf(stepsStr, sizeof(stepsStr), "%d", data.steps);//Turn the steps in fit
-        do {
-            tokeniseRecord(line, ",", data.date, data.time, stepsStr);
-            snprintf((char *) &result[x], sizeof(result[x]), "%s/%s/%s",data.date, data.time, stepsStr);//Put the result into the result[],and use it in the future step.
-            x++;//Read the next
-        }while(fgets(line, sizeof(line), file));
+                tokeniseRecord(line, ",", data.date, data.time, Char_steps); //Read the data, and value the three data.
 
-        for (int i = 0; i < 3; i++) {                     //Output the first three data.
-            printf("%s",result[i]);
+                int Int_steps = atoi(Char_steps); // Store each data into different lists.
+                result_steps[x] = Int_steps;
+                strcpy(result_date[x], data.date);
+                strcpy(result_time[x], data.time);
+
+                x++; // Read the next
+            } while (fgets(line, sizeof(line), file));
         }
-    }
 
-    fclose(file);
-    return 0;
+        for (int i = 0; i < 3; i++) { // Output the first three data.
+            printf("%s/%s/%d\n", result_date[i], result_time[i], result_steps[i]);
+        }
+
+        fclose(file);
+        return 0;
 }
-
-
