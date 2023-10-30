@@ -13,7 +13,7 @@ typedef struct {
 char line[1024];
 FITNESS_DATA data;
 char stepsStr[10];
-char result[1024][30];//Set up a array to hold the data.
+char result[1024][30];//Set up an array to hold the data.
 int x=0;
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
@@ -56,7 +56,7 @@ int main() {
         snprintf(stepsStr, sizeof(stepsStr), "%d", data.steps);//Turn the steps in fit
         do {
             tokeniseRecord(line, ",", data.date, data.time, stepsStr);
-            snprintf((char *) &result[x], sizeof(result[x]), "%s/%s/%s\n",data.date, data.time, stepsStr);//Put the result into the result[],and use it in the future step.
+            snprintf((char *) &result[x], sizeof(result[x]), "%s/%s/%s",data.date, data.time, stepsStr);//Put the result into the result[],and use it in the future step.
             x++;//Read the next
         }while(fgets(line, sizeof(line), file));
 
